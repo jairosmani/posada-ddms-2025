@@ -192,7 +192,6 @@
 
     /* --- EFECTO DE NIEVE --- */
     .snowfall {
-      pointer-events: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -200,6 +199,7 @@
       height: 100%;
       overflow: hidden;
       z-index: 1;
+      /* IMPORTANTE: quitamos pointer-events:none para permitir clics */
     }
 
     .snowflake {
@@ -209,15 +209,14 @@
       font-size: 1em;
       opacity: 0.8;
       animation-name: snowflakes-fall, snowflakes-shake;
-      animation-duration: 10s, 3s;
+      animation-duration: 15s, 3s;
       animation-timing-function: linear, ease-in-out;
       animation-iteration-count: infinite, infinite;
-      text-shadow: 0 0 4px rgba(255,255,255,0.4);
+      text-shadow: 0 0 4px rgba(255,255,255,0.4); /* o pon 'none' si no quieres brillo */
     }
 
-    /* Copo especial clickeable */
+    /* Copo especial clickeable (misma apariencia, solo cursor) */
     .snowflake-easter {
-      pointer-events: auto;
       cursor: pointer;
     }
 
@@ -305,8 +304,8 @@
 <body>
   <!-- Capa de nieve -->
   <div class="snowfall">
-    <!-- Copo especial clickeable -->
-    <div class="snowflake snowflake-easter">❆</div>
+    <!-- Copo especial con onclick -->
+    <div class="snowflake snowflake-easter" onclick="openEasterModal()">❆</div>
     <div class="snowflake">❅</div>
     <div class="snowflake">✻</div>
     <div class="snowflake">❆</div>
@@ -328,9 +327,7 @@
     <div class="header">
       <!--div class="badge">POSADA • DDMS • 2025</div-->
       <div class="title">🎄 Posada de la DDMS 🎄</div>
-      <div class="subtitle">
-        Convivencia de fin de año de la Dirección de Desarrollo y Mantenimiento de Sistemas
-      </div>
+      <div class="subtitle">Convivencia de fin de año de la Dirección de Desarrollo y Mantenimiento de Sistemas</div>
       <div class="snow">*  *  *  *  *  *  *</div>
       <div class="code-line">
         // Christmas build v2025.12.03 &nbsp;🎅&nbsp; git push origin joy
@@ -381,7 +378,7 @@
       <div class="highlight-box">
         <strong>Nota para devs y no devs:</strong><br>
         Solo necesitas llevar tu mejor actitud, tus mejores historias
-        <em>y muchas ganas de pasarla bien</em>.
+        <em>y muchas ganas de pasarla bien</em> .
       </div>
 
       <div class="footer">
@@ -407,32 +404,34 @@
         ganarás un <strong>monedero electrónico</strong>. 💳📲
       </p>
       <p>¡Felices Fiestas! 🎄✨</p>
-      <button id="closeModal" class="modal-close-btn">Cerrar</button>
+      <button class="modal-close-btn" onclick="closeEasterModal()">Cerrar</button>
     </div>
   </div>
 
   <script>
-    (function () {
-      var trigger = document.querySelector('.snowflake-easter');
+    function openEasterModal() {
       var modal = document.getElementById('easterModal');
-      var closeBtn = document.getElementById('closeModal');
-
-      if (trigger && modal && closeBtn) {
-        trigger.addEventListener('click', function () {
-          modal.classList.add('active');
-        });
-
-        closeBtn.addEventListener('click', function () {
-          modal.classList.remove('active');
-        });
-
-        modal.addEventListener('click', function (e) {
-          if (e.target === modal) {
-            modal.classList.remove('active');
-          }
-        });
+      if (modal) {
+        modal.classList.add('active');
       }
-    })();
+    }
+
+    function closeEasterModal() {
+      var modal = document.getElementById('easterModal');
+      if (modal) {
+        modal.classList.remove('active');
+      }
+    }
+
+    // Cerrar al hacer clic fuera de la caja
+    document.addEventListener('click', function (e) {
+      var modal = document.getElementById('easterModal');
+      if (!modal || !modal.classList.contains('active')) return;
+      var box = modal.querySelector('.modal-box');
+      if (e.target === modal && box && !box.contains(e.target)) {
+        closeEasterModal();
+      }
+    });
   </script>
 </body>
 </html>
