@@ -212,7 +212,13 @@
       animation-duration: 10s, 3s;
       animation-timing-function: linear, ease-in-out;
       animation-iteration-count: infinite, infinite;
-      text-shadow: 0 0 4px rgba(255,255,255,0.4); /* o pon 'none' si no quieres brillo */
+      text-shadow: 0 0 4px rgba(255,255,255,0.4);
+    }
+
+    /* Copo especial clickeable */
+    .snowflake-easter {
+      pointer-events: auto;
+      cursor: pointer;
     }
 
     @keyframes snowflakes-fall {
@@ -240,12 +246,67 @@
     .snowflake:nth-child(13) { left: 50%; font-size: 12px; animation-delay: 3.5s, 0.4s; }
     .snowflake:nth-child(14) { left: 70%; font-size: 16px; animation-delay: 4.5s, 1.6s; }
     .snowflake:nth-child(15) { left: 90%; font-size: 14px; animation-delay: 5.5s, 0.9s; }
+
+    /* Modal oculta */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #050b13;
+      border-radius: 12px;
+      border: 1px solid #33ff66;
+      padding: 20px 24px;
+      max-width: 420px;
+      color: #e5e5e5;
+      box-shadow: 0 0 24px rgba(0,0,0,0.9);
+      text-align: left;
+    }
+
+    .modal-box h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: #33ff99;
+    }
+
+    .modal-box p {
+      margin: 4px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .modal-close-btn {
+      margin-top: 12px;
+      background: #33ff66;
+      border: none;
+      color: #020408;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .modal-close-btn:hover {
+      background: #52ff88;
+    }
   </style>
 </head>
 <body>
   <!-- Capa de nieve -->
   <div class="snowfall">
-    <div class="snowflake">❆</div>
+    <!-- Copo especial clickeable -->
+    <div class="snowflake snowflake-easter">❆</div>
     <div class="snowflake">❅</div>
     <div class="snowflake">✻</div>
     <div class="snowflake">❆</div>
@@ -267,7 +328,9 @@
     <div class="header">
       <!--div class="badge">POSADA • DDMS • 2025</div-->
       <div class="title">🎄 Posada de la DDMS 🎄</div>
-      <div class="subtitle">Convivencia de fin de año de la Dirección de Desarrollo y Mantenimiento de Sistemas</div>
+      <div class="subtitle">
+        Convivencia de fin de año de la Dirección de Desarrollo y Mantenimiento de Sistemas
+      </div>
       <div class="snow">*  *  *  *  *  *  *</div>
       <div class="code-line">
         // Christmas build v2025.12.03 &nbsp;🎅&nbsp; git push origin joy
@@ -318,7 +381,7 @@
       <div class="highlight-box">
         <strong>Nota para devs y no devs:</strong><br>
         Solo necesitas llevar tu mejor actitud, tus mejores historias
-        <em>y muchas ganas de pasarla bien</em> .
+        <em>y muchas ganas de pasarla bien</em>.
       </div>
 
       <div class="footer">
@@ -331,16 +394,45 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal oculta para el premio -->
+  <div id="easterModal" class="modal-overlay">
+    <div class="modal-box">
+      <h2>🎁 Sorpresa DDMS</h2>
+      <p>Tu curiosidad te ha llevado a encontrar este mensaje secreto. 👀</p>
+      <p>
+        Si eres el primero en enviar una
+        <strong>captura de pantalla de esta ventana</strong>
+        al grupo de WhatsApp de la DDMS,
+        ganarás un <strong>monedero electrónico</strong>. 💳📲
+      </p>
+      <p>¡Felices Fiestas! 🎄✨</p>
+      <button id="closeModal" class="modal-close-btn">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var trigger = document.querySelector('.snowflake-easter');
+      var modal = document.getElementById('easterModal');
+      var closeBtn = document.getElementById('closeModal');
+
+      if (trigger && modal && closeBtn) {
+        trigger.addEventListener('click', function () {
+          modal.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', function () {
+          modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
-<!--
-  🎄🎁 EASTER EGG DDMS 🎁🎄
-
-  Tu curiosidad te ha llevado a encontrar este mensaje secreto. 👀
-
-  Si eres el primero en mandar captura de pantalla
-  de ESTE bloque de comentario al grupo de WhatsApp de la DDMS,
-  ganarás un monedero electrónico. 💳📲
-
-  ¡Felices Fiestas!! ✨
--->
